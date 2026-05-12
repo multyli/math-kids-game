@@ -11,101 +11,145 @@ var questionEl = document.getElementById("question");
 var answersEl = document.getElementById("answers");
 var streakEl = document.getElementById("streak");
 
-// ЭМОДЖИ
+// EMOJI
 var goodEmojis = ["🎉", "😄", "👍", "🥳", "✨"];
 var badEmojis = ["😢", "🙈", "😕", "💧", "🥺"];
 
 function setMode(newMode) {
+
   mode = newMode;
+
   usedQuestions.clear();
+
   updateUI();
+
   nextQuestion();
 }
 
 function setLevel(newLevel) {
+
   level = newLevel;
+
   usedQuestions.clear();
+
   updateUI();
+
   nextQuestion();
 }
 
 function updateUI() {
 
+  // MODES
   var modes = ["add", "subtract", "mixed", "objects"];
 
   modes.forEach(function(m) {
-    var el = document.getElementById("mode-" + m);
-    if (el) el.classList.remove("active");
+
+    var btn = document.getElementById("mode-" + m);
+
+    if (btn) {
+      btn.classList.remove("active");
+    }
   });
 
-  var activeMode = document.getElementById("mode-" + mode);
-  if (activeMode) activeMode.classList.add("active");
+  var activeMode =
+    document.getElementById("mode-" + mode);
 
-  for (var i = 1; i <= 3; i++) {
-    var lvl = document.getElementById("level-" + i);
-    if (lvl) lvl.classList.remove("active");
+  if (activeMode) {
+    activeMode.classList.add("active");
   }
 
-  var activeLevel = document.getElementById("level-" + level);
-  if (activeLevel) activeLevel.classList.add("active");
+  // LEVELS
+  for (var i = 1; i <= 3; i++) {
+
+    var lvlBtn =
+      document.getElementById("level-" + i);
+
+    if (lvlBtn) {
+      lvlBtn.classList.remove("active");
+    }
+  }
+
+  var activeLevel =
+    document.getElementById("level-" + level);
+
+  if (activeLevel) {
+    activeLevel.classList.add("active");
+  }
 }
 
 function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 
-function key(a, op, b) {
-  return a + op + b;
+  return Math.floor(
+    Math.random() * (max - min + 1)
+  ) + min;
 }
 
 function shuffle(arr) {
-  return arr.sort(() => Math.random() - 0.5);
+
+  return arr.sort(function() {
+    return Math.random() - 0.5;
+  });
+}
+
+function key(a, op, b) {
+
+  return a + op + b;
 }
 
 function generateAnswers(correct) {
 
-  var arr = [correct];
+  var answers = [correct];
 
-  while (arr.length < 4) {
+  while (answers.length < 4) {
 
-    var fake = correct + random(-5, 5);
+    var fake =
+      correct + random(-5, 5);
 
     if (
       fake !== correct &&
       fake >= 0 &&
       fake <= 100 &&
-      !arr.includes(fake)
+      !answers.includes(fake)
     ) {
-      arr.push(fake);
+      answers.push(fake);
     }
   }
 
-  return shuffle(arr);
+  return shuffle(answers);
 }
 
 function showEmoji(success) {
 
-  var emoji = document.createElement("div");
+  var popup =
+    document.createElement("div");
 
-  emoji.className = "emoji-popup";
+  popup.className = "emoji-popup";
 
   if (success) {
-    emoji.textContent =
-      goodEmojis[random(0, goodEmojis.length - 1)];
+
+    popup.textContent =
+      goodEmojis[
+        random(0, goodEmojis.length - 1)
+      ];
+
   } else {
-    emoji.textContent =
-      badEmojis[random(0, badEmojis.length - 1)];
+
+    popup.textContent =
+      badEmojis[
+        random(0, badEmojis.length - 1)
+      ];
   }
 
-  document.body.appendChild(emoji);
+  document.body.appendChild(popup);
 
   setTimeout(function() {
-    emoji.remove();
+    popup.remove();
   }, 600);
 }
 
 function generateObjectsQuestion() {
 
+  // LEVEL 1
   if (level === 1) {
 
     var count = random(1, 10);
@@ -123,6 +167,7 @@ function generateObjectsQuestion() {
     `;
   }
 
+  // LEVEL 2
   if (level === 2) {
 
     var c1 = random(1, 5);
@@ -143,14 +188,16 @@ function generateObjectsQuestion() {
     `;
   }
 
+  // LEVEL 3
   if (level === 3) {
 
     var total = 0;
     var html = "";
 
-    var countCoins = random(3, 4);
+    var coins =
+      random(3, 4);
 
-    for (var i = 0; i < countCoins; i++) {
+    for (var i = 0; i < coins; i++) {
 
       var val = random(1, 9);
 
@@ -172,20 +219,24 @@ function generateObjectsQuestion() {
     `;
   }
 
-  renderAnswers(generateAnswers(currentAnswer));
+  renderAnswers(
+    generateAnswers(currentAnswer)
+  );
 }
 
 function nextQuestion() {
 
   // OBJECTS MODE
   if (mode === "objects") {
+
     generateObjectsQuestion();
+
     return;
   }
 
   var a, b, op;
 
-  // ВЫБОР ОПЕРАЦИИ ПО РЕЖИМУ
+  // MODE
   if (mode === "add") {
     op = "+";
   }
@@ -195,7 +246,10 @@ function nextQuestion() {
   }
 
   if (mode === "mixed") {
-    op = Math.random() > 0.5 ? "+" : "-";
+    op =
+      Math.random() > 0.5
+        ? "+"
+        : "-";
   }
 
   // LEVEL 1
@@ -206,16 +260,19 @@ function nextQuestion() {
       if (op === "+") {
 
         a = random(1, 19);
+
         b = random(1, 20 - a);
 
       } else {
 
         a = random(1, 20);
-        b = random(1, a);
 
+        b = random(1, a);
       }
 
-    } while (usedQuestions.has(key(a, op, b)));
+    } while (
+      usedQuestions.has(key(a, op, b))
+    );
   }
 
   // LEVEL 2
@@ -224,15 +281,21 @@ function nextQuestion() {
     do {
 
       a = random(10, 99);
+
       b = random(1, 9);
 
-      if (op === "-" && b > a) {
+      if (
+        op === "-" &&
+        b > a
+      ) {
         var t = a;
         a = b;
         b = t;
       }
 
-    } while (usedQuestions.has(key(a, op, b)));
+    } while (
+      usedQuestions.has(key(a, op, b))
+    );
   }
 
   // LEVEL 3
@@ -241,18 +304,26 @@ function nextQuestion() {
     do {
 
       a = random(10, 99);
+
       b = random(10, 99);
 
-      if (op === "-" && b > a) {
+      if (
+        op === "-" &&
+        b > a
+      ) {
         var t2 = a;
         a = b;
         b = t2;
       }
 
-    } while (usedQuestions.has(key(a, op, b)));
+    } while (
+      usedQuestions.has(key(a, op, b))
+    );
   }
 
-  usedQuestions.add(key(a, op, b));
+  usedQuestions.add(
+    key(a, op, b)
+  );
 
   currentAnswer =
     op === "+"
@@ -276,11 +347,13 @@ function renderAnswers(arr) {
 
   arr.forEach(function(ans) {
 
-    var btn = document.createElement("button");
+    var btn =
+      document.createElement("button");
 
     btn.textContent = ans;
 
     btn.onclick = function() {
+
       checkAnswer(ans, btn);
     };
 
@@ -301,7 +374,9 @@ function checkAnswer(ans, btn) {
     showEmoji(true);
 
     setTimeout(function() {
+
       nextQuestion();
+
     }, 600);
 
   } else {
@@ -315,10 +390,13 @@ function checkAnswer(ans, btn) {
     showEmoji(false);
 
     setTimeout(function() {
+
       nextQuestion();
+
     }, 600);
   }
 }
 
 updateUI();
+
 nextQuestion();
