@@ -59,13 +59,8 @@ h1 {
   transform: scale(1.05);
 }
 
-.answers button.correct {
-  background: #b8ffb8;
-}
-
-.answers button.wrong {
-  background: #ffd0d0;
-}
+.answers button.correct { background: #b8ffb8; }
+.answers button.wrong { background: #ffd0d0; }
 
 .modes {
   display: grid;
@@ -80,11 +75,10 @@ h1 {
   background: #6f8cff;
   color: white;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.modes button:hover {
-  transform: scale(1.03);
+.modes button.active {
+  background: #2f4fff;
 }
 
 .levels {
@@ -101,11 +95,10 @@ h1 {
   background: #ffcc66;
   cursor: pointer;
   font-weight: bold;
-  transition: 0.2s;
 }
 
-.levels button:hover {
-  transform: scale(1.03);
+.levels button.active {
+  background: #ff9f1a;
 }
 
 .column-help {
@@ -113,7 +106,6 @@ h1 {
   margin-bottom: 30px;
   white-space: pre;
   font-family: monospace;
-  color: #444;
 }
 
 .hidden {
@@ -122,26 +114,4 @@ h1 {
 
 .objects {
   font-size: 50px;
-  line-height: 1.5;
-}
-
-@media (max-width: 600px) {
-
-  h1 {
-    font-size: 28px;
-  }
-
-  .question {
-    font-size: 42px;
-  }
-
-  .answers button {
-    font-size: 28px;
-    padding: 20px;
-  }
-
-  .modes button,
-  .levels button {
-    font-size: 20px;
-  }
 }
