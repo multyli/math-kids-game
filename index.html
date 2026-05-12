@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Весёлая математика</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app">
+
+    <h1>🌟 Весёлая математика 🌟</h1>
+
+    <div class="top-bar">
+      <div class="streak">
+        🔥 Серия:
+        <span id="streak">0</span>
+      </div>
+    </div>
+
+    <div id="question-area">
+
+      <div id="question" class="question">
+        5 + 3 = ?
+      </div>
+
+      <div id="column-help" class="column-help hidden"></div>
+
+      <div class="answers" id="answers"></div>
+
+    </div>
+
+    <div class="modes">
+
+      <button onclick="setMode('add')">
+        ➕ Сложение
+      </button>
+
+      <button onclick="setMode('subtract')">
+        ➖ Вычитание
+      </button>
+
+      <button onclick="setMode('mixed')">
+        🎲 Смешанные
+      </button>
+
+      <button onclick="setMode('objects')">
+        🐌 Предметы
+      </button>
+
+    </div>
+
+    <div class="levels">
+
+      <button onclick="setLevel(1)">
+        ⭐ Уровень 1
+      </button>
+
+      <button onclick="setLevel(2)">
+        ⭐⭐ Уровень 2
+      </button>
+
+      <button onclick="setLevel(3)">
+        ⭐⭐⭐ Уровень 3
+      </button>
+
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

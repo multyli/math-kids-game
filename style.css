@@ -1,0 +1,147 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7ff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  color: #333;
+}
+
+.app {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.top-bar {
+  margin-bottom: 20px;
+}
+
+.streak {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.question {
+  font-size: 54px;
+  margin: 40px 0;
+  font-weight: bold;
+}
+
+.answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 120px;
+}
+
+.answers button {
+  font-size: 32px;
+  padding: 25px;
+  border: none;
+  border-radius: 20px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.answers button:hover {
+  transform: scale(1.05);
+}
+
+.answers button.correct {
+  background: #b8ffb8;
+}
+
+.answers button.wrong {
+  background: #ffd0d0;
+}
+
+.modes {
+  display: grid;
+  gap: 10px;
+}
+
+.modes button {
+  font-size: 22px;
+  padding: 18px;
+  border: none;
+  border-radius: 16px;
+  background: #6f8cff;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.modes button:hover {
+  transform: scale(1.03);
+}
+
+.levels {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.levels button {
+  font-size: 22px;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: #ffcc66;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.levels button:hover {
+  transform: scale(1.03);
+}
+
+.column-help {
+  font-size: 42px;
+  margin-bottom: 30px;
+  white-space: pre;
+  font-family: monospace;
+  color: #444;
+}
+
+.hidden {
+  display: none;
+}
+
+.objects {
+  font-size: 50px;
+  line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .question {
+    font-size: 42px;
+  }
+
+  .answers button {
+    font-size: 28px;
+    padding: 20px;
+  }
+
+  .modes button,
+  .levels button {
+    font-size: 20px;
+  }
+}
