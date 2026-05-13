@@ -17,6 +17,30 @@ body {
   box-sizing: border-box;
 }
 
+.language-switch {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.language-switch button {
+  font-size: 18px;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 14px;
+  background: white;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: 0.2s;
+  font-weight: bold;
+}
+
+.language-switch button.active {
+  background: #2f4fff;
+  color: white;
+}
+
 h1 {
   font-size: 36px;
   margin-bottom: 20px;
@@ -36,6 +60,50 @@ h1 {
   margin: 40px 0;
   font-weight: bold;
   min-height: 120px;
+}
+
+.column-question {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 56px;
+  line-height: 1.1;
+  margin: 0 auto;
+}
+
+.column-row {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.column-row span,
+.column-answer {
+  width: 36px;
+  text-align: center;
+}
+
+.operator-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.operator {
+  width: 30px;
+  text-align: center;
+}
+
+.digits {
+  display: flex;
+  gap: 6px;
+}
+
+.column-line {
+  width: 100%;
+  border-top: 4px solid #333;
+  margin-top: 6px;
+  padding-top: 6px;
 }
 
 .answers {
@@ -68,7 +136,6 @@ h1 {
   background: #ffd0d0;
 }
 
-/* РЕЖИМЫ */
 .modes {
   display: grid;
   gap: 10px;
@@ -90,7 +157,6 @@ h1 {
   transform: scale(1.03);
 }
 
-/* УРОВНИ */
 .levels {
   display: grid;
   gap: 10px;
@@ -117,8 +183,6 @@ h1 {
   font-size: 54px;
   line-height: 1.6;
 }
-
-/* EMOJI ANIMATION */
 
 .emoji-popup {
   position: fixed;
@@ -149,8 +213,6 @@ h1 {
   }
 }
 
-/* MOBILE */
-
 @media (max-width: 600px) {
 
   h1 {
@@ -159,6 +221,15 @@ h1 {
 
   .question {
     font-size: 42px;
+  }
+
+  .column-question {
+    font-size: 44px;
+  }
+
+  .column-row span,
+  .column-answer {
+    width: 28px;
   }
 
   .answers button {

@@ -10,11 +10,16 @@
 
   <div class="app">
 
-    <h1>Математика</h1>
+    <div class="language-switch">
+      <button id="lang-ru" onclick="setLanguage('ru')">РУ</button>
+      <button id="lang-sl" onclick="setLanguage('sl')">SLO</button>
+    </div>
+
+    <h1 id="title">Математика</h1>
 
     <div class="top-bar">
       <div class="streak">
-        🔥 Без ошибок:
+        🔥 <span id="streak-label">Без ошибок:</span>
         <span id="streak">0</span>
       </div>
     </div>
@@ -29,41 +34,25 @@
 
     </div>
 
-    <!-- РЕЖИМЫ -->
     <div class="modes">
 
-      <button id="mode-add" onclick="setMode('add')">
-        ➕ Сложение
-      </button>
+      <button id="mode-add" onclick="setMode('add')"></button>
 
-      <button id="mode-subtract" onclick="setMode('subtract')">
-        ➖ Вычитание
-      </button>
+      <button id="mode-subtract" onclick="setMode('subtract')"></button>
 
-      <button id="mode-mixed" onclick="setMode('mixed')">
-        🎲 Смешанные
-      </button>
+      <button id="mode-mixed" onclick="setMode('mixed')"></button>
 
-      <button id="mode-objects" onclick="setMode('objects')">
-        🐌 Предметы
-      </button>
+      <button id="mode-objects" onclick="setMode('objects')"></button>
 
     </div>
 
-    <!-- УРОВНИ -->
     <div class="levels">
 
-      <button id="level-1" onclick="setLevel(1)">
-        ⭐ Уровень 1
-      </button>
+      <button id="level-1" onclick="setLevel(1)"></button>
 
-      <button id="level-2" onclick="setLevel(2)">
-        ⭐⭐ Уровень 2
-      </button>
+      <button id="level-2" onclick="setLevel(2)"></button>
 
-      <button id="level-3" onclick="setLevel(3)">
-        ⭐⭐⭐ Уровень 3
-      </button>
+      <button id="level-3" onclick="setLevel(3)"></button>
 
     </div>
 
