@@ -217,8 +217,8 @@ function nextQuestion(){
   let a,b;
 
   if(level === 1){
-    a = rnd(1,20);
-    b = rnd(1,20);
+    a = rnd(9,20);
+    b = rnd(1,10);
   }
 
   if(level === 2){
