@@ -1,63 +1,50 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Математика</title>
-  <link rel="stylesheet" href="style.css" />
+
+  <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <div class="language-switch">
-      <button id="lang-ru" onclick="setLanguage('ru')">РУ</button>
-      <button id="lang-sl" onclick="setLanguage('sl')">SLO</button>
-    </div>
-
-    <h1 id="title">Математика</h1>
-
-    <div class="top-bar">
-      <div class="streak">
-        🔥 <span id="streak-label">Без ошибок:</span>
-        <span id="streak">0</span>
-      </div>
-    </div>
-
-    <div id="question-area">
-
-      <div id="question" class="question">
-        5 + 3 = ?
-      </div>
-
-      <div class="answers" id="answers"></div>
-
-    </div>
-
-    <div class="modes">
-
-      <button id="mode-add" onclick="setMode('add')"></button>
-
-      <button id="mode-subtract" onclick="setMode('subtract')"></button>
-
-      <button id="mode-mixed" onclick="setMode('mixed')"></button>
-
-      <button id="mode-objects" onclick="setMode('objects')"></button>
-
-    </div>
-
-    <div class="levels">
-
-      <button id="level-1" onclick="setLevel(1)"></button>
-
-      <button id="level-2" onclick="setLevel(2)"></button>
-
-      <button id="level-3" onclick="setLevel(3)"></button>
-
-    </div>
-
+  <div class="language-switch">
+    <button id="lang-ru" onclick="setLanguage('ru')">РУ</button>
+    <button id="lang-sl" onclick="setLanguage('sl')">SLO</button>
   </div>
 
-  <script src="script.js"></script>
+  <h1 id="title">Математика</h1>
+
+  <div class="top-bar">
+    <div class="streak">
+      🔥 <span id="streak-label">Без ошибок:</span>
+      <span id="streak">0</span>
+    </div>
+  </div>
+
+  <div id="question" class="question"></div>
+
+  <div id="answers" class="answers"></div>
+
+  <div class="modes">
+    <button id="mode-add" onclick="setMode('add')"></button>
+    <button id="mode-subtract" onclick="setMode('subtract')"></button>
+    <button id="mode-mixed" onclick="setMode('mixed')"></button>
+    <button id="mode-objects" onclick="setMode('objects')"></button>
+  </div>
+
+  <div class="levels">
+    <button id="level-1" onclick="setLevel(1)"></button>
+    <button id="level-2" onclick="setLevel(2)"></button>
+    <button id="level-3" onclick="setLevel(3)"></button>
+  </div>
+
+</div>
+
+<script src="./script.js"></script>
+
 </body>
 </html>

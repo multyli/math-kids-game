@@ -1,439 +1,290 @@
-var mode = "add";
-var level = 1;
-var streak = 0;
-var language = "ru";
 
-var currentAnswer = 0;
-var currentQuestion = "";
-var currentQuestionData = null;
+let mode = 'add';
+let level = 1;
+let streak = 0;
+let language = 'ru';
 
-var usedQuestions = new Set();
-var wrongQuestionsQueue = [];
+let currentAnswer = 0;
+let currentData = null;
 
-var questionEl = document.getElementById("question");
-var answersEl = document.getElementById("answers");
-var streakEl = document.getElementById("streak");
+const questionEl = document.getElementById('question');
+const answersEl = document.getElementById('answers');
+const streakEl = document.getElementById('streak');
 
-var goodEmojis = ["🎉", "😄", "👍", "🥳", "✨"];
-var badEmojis = ["😢", "🙈", "😕", "💧", "🥺"];
+const retryQueue = [];
 
-var translations = {
-  ru: {
-    title: "Математика",
-    streak: "Без ошибок:",
-    add: "➕ Сложение",
-    subtract: "➖ Вычитание",
-    mixed: "🎲 Смешанные",
-    objects: "🐌 Предметы",
-    level1: "⭐ Уровень 1",
-    level2: "⭐⭐ Уровень 2",
-    level3: "⭐⭐⭐ Уровень 3",
-    snails: "Сколько улиток?",
-    coins: "Сколько монет?",
-    total: "Какая сумма?"
+const translations = {
+  ru:{
+    title:'Математика',
+    streak:'Без ошибок:',
+    add:'➕ Сложение',
+    subtract:'➖ Вычитание',
+    mixed:'🎲 Смешанные',
+    objects:'🐌 Предметы',
+    level1:'⭐ Уровень 1',
+    level2:'⭐⭐ Уровень 2',
+    level3:'⭐⭐⭐ Уровень 3',
+    snails:'Сколько улиток?',
+    total:'Какая сумма?'
   },
-  sl: {
-    title: "Matematika",
-    streak: "Brez napak:",
-    add: "➕ Seštevanje",
-    subtract: "➖ Odštevanje",
-    mixed: "🎲 Mešano",
-    objects: "🐌 Predmeti",
-    level1: "⭐ Stopnja 1",
-    level2: "⭐⭐ Stopnja 2",
-    level3: "⭐⭐⭐ Stopnja 3",
-    snails: "Koliko polžev?",
-    coins: "Koliko kovancev?",
-    total: "Kolikšna je vsota?"
+  sl:{
+    title:'Matematika',
+    streak:'Brez napak:',
+    add:'➕ Seštevanje',
+    subtract:'➖ Odštevanje',
+    mixed:'🎲 Mešano',
+    objects:'🐌 Predmeti',
+    level1:'⭐ Stopnja 1',
+    level2:'⭐⭐ Stopnja 2',
+    level3:'⭐⭐⭐ Stopnja 3',
+    snails:'Koliko polžev?',
+    total:'Kolikšna je vsota?'
   }
 };
 
-function setLanguage(lang) {
+function setLanguage(lang){
   language = lang;
 
-  document.documentElement.lang = lang;
+  document.getElementById('lang-ru').classList.remove('active');
+  document.getElementById('lang-sl').classList.remove('active');
 
-  document.getElementById("lang-ru").classList.remove("active");
-  document.getElementById("lang-sl").classList.remove("active");
+  document.getElementById('lang-' + lang).classList.add('active');
 
-  document.getElementById("lang-" + lang).classList.add("active");
-
-  applyTranslations();
-
-  if (mode === "objects") {
-    nextQuestion();
-  }
-}
-
-function applyTranslations() {
-  var t = translations[language];
+  const t = translations[lang];
 
   document.title = t.title;
-  document.getElementById("title").textContent = t.title;
-  document.getElementById("streak-label").textContent = t.streak;
 
-  document.getElementById("mode-add").textContent = t.add;
-  document.getElementById("mode-subtract").textContent = t.subtract;
-  document.getElementById("mode-mixed").textContent = t.mixed;
-  document.getElementById("mode-objects").textContent = t.objects;
+  document.getElementById('title').textContent = t.title;
+  document.getElementById('streak-label').textContent = t.streak;
 
-  document.getElementById("level-1").textContent = t.level1;
-  document.getElementById("level-2").textContent = t.level2;
-  document.getElementById("level-3").textContent = t.level3;
+  document.getElementById('mode-add').textContent = t.add;
+  document.getElementById('mode-subtract').textContent = t.subtract;
+  document.getElementById('mode-mixed').textContent = t.mixed;
+  document.getElementById('mode-objects').textContent = t.objects;
+
+  document.getElementById('level-1').textContent = t.level1;
+  document.getElementById('level-2').textContent = t.level2;
+  document.getElementById('level-3').textContent = t.level3;
 }
 
-function setMode(newMode) {
-  mode = newMode;
-  usedQuestions.clear();
-  wrongQuestionsQueue = [];
-  updateUI();
+function setMode(m){
+  mode = m;
+  updateButtons();
   nextQuestion();
 }
 
-function setLevel(newLevel) {
-  level = newLevel;
-  usedQuestions.clear();
-  wrongQuestionsQueue = [];
-  updateUI();
+function setLevel(l){
+  level = l;
+  updateButtons();
   nextQuestion();
 }
 
-function updateUI() {
-  var modes = ["add", "subtract", "mixed", "objects"];
+function updateButtons(){
 
-  modes.forEach(function(m) {
-    var btn = document.getElementById("mode-" + m);
-
-    if (btn) {
-      btn.classList.remove("active");
-    }
+  ['add','subtract','mixed','objects'].forEach(m=>{
+    document.getElementById('mode-' + m).classList.remove('active');
   });
 
-  var activeMode = document.getElementById("mode-" + mode);
+  document.getElementById('mode-' + mode).classList.add('active');
 
-  if (activeMode) {
-    activeMode.classList.add("active");
-  }
-
-  for (var i = 1; i <= 3; i++) {
-    var lvlBtn = document.getElementById("level-" + i);
-
-    if (lvlBtn) {
-      lvlBtn.classList.remove("active");
-    }
-  }
-
-  var activeLevel = document.getElementById("level-" + level);
-
-  if (activeLevel) {
-    activeLevel.classList.add("active");
-  }
-}
-
-function random(min, max) {
-  return Math.floor(
-    Math.random() * (max - min + 1)
-  ) + min;
-}
-
-function shuffle(arr) {
-  return arr.sort(function() {
-    return Math.random() - 0.5;
+  [1,2,3].forEach(l=>{
+    document.getElementById('level-' + l).classList.remove('active');
   });
+
+  document.getElementById('level-' + level).classList.add('active');
 }
 
-function key(a, op, b) {
-  return a + op + b;
+function rnd(min,max){
+  return Math.floor(Math.random()*(max-min+1))+min;
 }
 
-function generateAnswers(correct) {
-  var answers = [correct];
+function shuffle(arr){
+  return arr.sort(()=>Math.random()-0.5);
+}
 
-  while (answers.length < 4) {
-    var fake = correct + random(-5, 5);
+function answers(correct){
 
-    if (
-      fake !== correct &&
-      fake >= 0 &&
-      fake <= 100 &&
-      !answers.includes(fake)
-    ) {
-      answers.push(fake);
+  const arr = [correct];
+
+  while(arr.length < 4){
+
+    const v = correct + rnd(-5,5);
+
+    if(v >= 0 && !arr.includes(v)){
+      arr.push(v);
     }
   }
 
-  return shuffle(answers);
+  return shuffle(arr);
 }
 
-function showEmoji(success) {
-  var popup = document.createElement("div");
+function renderAnswers(list){
 
-  popup.className = "emoji-popup";
+  answersEl.innerHTML = '';
 
-  if (success) {
-    popup.textContent = goodEmojis[random(0, goodEmojis.length - 1)];
-  } else {
-    popup.textContent = badEmojis[random(0, badEmojis.length - 1)];
-  }
+  list.forEach(v=>{
 
-  document.body.appendChild(popup);
+    const btn = document.createElement('button');
 
-  setTimeout(function() {
-    popup.remove();
-  }, 600);
-}
+    btn.textContent = v;
 
-function renderColumnQuestion(a, op, b) {
-  var top = String(a);
-  var bottom = String(b);
-
-  var width = Math.max(top.length, bottom.length);
-
-  top = top.padStart(width, " ");
-  bottom = bottom.padStart(width, " ");
-
-  var topDigits = top.split("").map(function(char) {
-    return '<span>' + (char === " " ? "&nbsp;" : char) + '</span>';
-  }).join("");
-
-  var bottomDigits = bottom.split("").map(function(char) {
-    return '<span>' + (char === " " ? "&nbsp;" : char) + '</span>';
-  }).join("");
-
-  questionEl.innerHTML = `
-    <div class="column-question">
-      <div class="column-row">${topDigits}</div>
-      <div class="column-row operator-row">
-        <span class="operator">${op}</span>
-        <div class="digits">${bottomDigits}</div>
-      </div>
-      <div class="column-line"></div>
-      <div class="column-answer">?</div>
-    </div>
-  `;
-}
-
-function generateObjectsQuestion() {
-  var t = translations[language];
-
-  if (level === 1) {
-    var count = random(1, 10);
-
-    currentAnswer = count;
-
-    questionEl.innerHTML = `
-      <div class="objects">
-        ${"🐌 ".repeat(count)}
-      </div>
-
-      <div style="margin-top:20px">
-        ${t.snails}
-      </div>
-    `;
-  }
-
-  if (level === 2) {
-    var c1 = random(1, 5);
-    var c2 = random(1, 5);
-
-    currentAnswer = c1 + c2;
-
-    questionEl.innerHTML = `
-      <div class="objects">
-        🪙 ${c1}
-        &nbsp;&nbsp;
-        🪙 ${c2}
-      </div>
-
-      <div style="margin-top:20px">
-        ${t.coins}
-      </div>
-    `;
-  }
-
-  if (level === 3) {
-    var total = 0;
-    var html = "";
-
-    var coins = random(3, 4);
-
-    for (var i = 0; i < coins; i++) {
-      var val = random(1, 9);
-
-      total += val;
-
-      html += "🪙 " + val + " ";
-    }
-
-    currentAnswer = total;
-
-    questionEl.innerHTML = `
-      <div class="objects">
-        ${html}
-      </div>
-
-      <div style="margin-top:20px">
-        ${t.total}
-      </div>
-    `;
-  }
-
-  renderAnswers(generateAnswers(currentAnswer));
-}
-
-function nextQuestion() {
-  if (mode === "objects") {
-    generateObjectsQuestion();
-    return;
-  }
-
-  if (wrongQuestionsQueue.length > 0) {
-    var retry = wrongQuestionsQueue.shift();
-
-    currentAnswer = retry.answer;
-    currentQuestion = retry.a + " " + retry.op + " " + retry.b;
-    currentQuestionData = retry;
-
-    renderColumnQuestion(retry.a, retry.op, retry.b);
-
-    renderAnswers(generateAnswers(currentAnswer));
-    return;
-  }
-
-  var a, b, op;
-
-  if (mode === "add") {
-    op = "+";
-  }
-
-  if (mode === "subtract") {
-    op = "-";
-  }
-
-  if (mode === "mixed") {
-    op = Math.random() > 0.5 ? "+" : "-";
-  }
-
-  if (level === 1) {
-    do {
-      if (op === "+") {
-        a = random(1, 19);
-        b = random(1, 20 - a);
-      } else {
-        a = random(1, 20);
-        b = random(1, a);
-      }
-    } while (
-      usedQuestions.has(key(a, op, b))
-    );
-  }
-
-  if (level === 2) {
-    do {
-      a = random(10, 99);
-      b = random(1, 9);
-
-      if (op === "-" && b > a) {
-        var t = a;
-        a = b;
-        b = t;
-      }
-    } while (
-      usedQuestions.has(key(a, op, b))
-    );
-  }
-
-  if (level === 3) {
-    do {
-      a = random(10, 99);
-      b = random(10, 99);
-
-      if (op === "-" && b > a) {
-        var t2 = a;
-        a = b;
-        b = t2;
-      }
-    } while (
-      usedQuestions.has(key(a, op, b))
-    );
-  }
-
-  usedQuestions.add(key(a, op, b));
-
-  currentAnswer = op === "+" ? a + b : a - b;
-
-  currentQuestion = a + " " + op + " " + b;
-
-  currentQuestionData = {
-    a: a,
-    b: b,
-    op: op,
-    answer: currentAnswer
-  };
-
-  questionEl.textContent = currentQuestion + " = ?";
-
-  renderAnswers(generateAnswers(currentAnswer));
-}
-
-function renderAnswers(arr) {
-  answersEl.innerHTML = "";
-
-  arr.forEach(function(ans) {
-    var btn = document.createElement("button");
-
-    btn.textContent = ans;
-
-    btn.onclick = function() {
-      checkAnswer(ans, btn);
-    };
+    btn.onclick = ()=>check(v,btn);
 
     answersEl.appendChild(btn);
   });
 }
 
-function checkAnswer(ans, btn) {
-  if (ans === currentAnswer) {
-    streak++;
+function renderColumn(a,op,b){
 
-    streakEl.textContent = streak;
+  const top = String(a);
+  const bottom = String(b);
 
-    btn.classList.add("correct");
+  const width = Math.max(top.length,bottom.length);
 
-    showEmoji(true);
+  const t = top.padStart(width,' ');
+  const bt = bottom.padStart(width,' ');
 
-    setTimeout(function() {
-      nextQuestion();
-    }, 600);
+  questionEl.innerHTML = `
+    <div class="column-question">
 
-  } else {
-    streak = 0;
+      <div class="column-row">
+        ${t.split('').map(x=>`<span>${x === ' ' ? '&nbsp;' : x}</span>`).join('')}
+      </div>
 
-    streakEl.textContent = streak;
+      <div class="column-row operator-row">
+        <span class="operator">${op}</span>
 
-    btn.classList.add("wrong");
+        <div class="digits">
+          ${bt.split('').map(x=>`<span>${x === ' ' ? '&nbsp;' : x}</span>`).join('')}
+        </div>
+      </div>
 
-    if (
-      currentQuestionData &&
-      mode !== "objects"
-    ) {
-      wrongQuestionsQueue.push({
-        a: currentQuestionData.a,
-        b: currentQuestionData.b,
-        op: currentQuestionData.op,
-        answer: currentQuestionData.answer
-      });
-    }
+      <div class="column-line"></div>
 
-    showEmoji(false);
+      <div class="column-answer">?</div>
 
-    setTimeout(function() {
-      nextQuestion();
-    }, 600);
-  }
+    </div>
+  `;
 }
 
-applyTranslations();
-setLanguage("ru");
-updateUI();
+function nextQuestion(){
+
+  if(retryQueue.length){
+
+    const q = retryQueue.shift();
+
+    currentData = q;
+    currentAnswer = q.answer;
+
+    renderColumn(q.a,q.op,q.b);
+
+    renderAnswers(answers(currentAnswer));
+
+    return;
+  }
+
+  if(mode === 'objects'){
+
+    const count = rnd(1,10);
+
+    currentAnswer = count;
+
+    questionEl.innerHTML = `
+      <div class="objects">
+        ${'🐌 '.repeat(count)}
+      </div>
+
+      <div style="margin-top:20px">
+        ${translations[language].snails}
+      </div>
+    `;
+
+    renderAnswers(answers(currentAnswer));
+
+    return;
+  }
+
+  let op = '+';
+
+  if(mode === 'subtract'){
+    op = '-';
+  }
+
+  if(mode === 'mixed'){
+    op = Math.random() > 0.5 ? '+' : '-';
+  }
+
+  let a,b;
+
+  if(level === 1){
+    a = rnd(1,20);
+    b = rnd(1,20);
+  }
+
+  if(level === 2){
+    a = rnd(10,99);
+    b = rnd(1,9);
+  }
+
+  if(level === 3){
+    a = rnd(10,99);
+    b = rnd(10,99);
+  }
+
+  if(op === '-' && b > a){
+    [a,b] = [b,a];
+  }
+
+  currentAnswer = op === '+' ? a+b : a-b;
+
+  currentData = {a,b,op,answer:currentAnswer};
+
+  questionEl.textContent = `${a} ${op} ${b} = ?`;
+
+  renderAnswers(answers(currentAnswer));
+}
+
+function emoji(ok){
+
+  const el = document.createElement('div');
+
+  el.className = 'emoji-popup';
+
+  el.textContent = ok ? '🎉' : '😢';
+
+  document.body.appendChild(el);
+
+  setTimeout(()=>{
+    el.remove();
+  },600);
+}
+
+function check(v,btn){
+
+  if(v === currentAnswer){
+
+    streak++;
+
+    btn.classList.add('correct');
+
+    emoji(true);
+
+  }else{
+
+    streak = 0;
+
+    btn.classList.add('wrong');
+
+    retryQueue.push(currentData);
+
+    emoji(false);
+  }
+
+  streakEl.textContent = streak;
+
+  setTimeout(nextQuestion,600);
+}
+
+setLanguage('ru');
+updateButtons();
 nextQuestion();
